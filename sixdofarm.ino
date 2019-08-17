@@ -1,6 +1,8 @@
+#include <LiquidCrystal.h>
+
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
-#include <VerSpeedServo.h>
+#include <VarSpeedServo.h>
 //駆動に必要な最低PCMパルス数
 #define L_PULSE_START 80 //駆動に必要な最低PCMパルス数
 #define R_PULSE_START 80 //駆動に必要な最低PCMパルス数
@@ -21,7 +23,8 @@ if(msg.linear.x > 0.0){
   l_motor = (int)(-1*L_PULSE_START + PULSE_1MPS * msg.linear.x);
   r_motor = (int)(-1*R_PULSE_START + PULSE_1MPS * msg.linear.x);
 }else{
-  l_motor = 0;
+  l_motor = 0;file:///home/kaoru/Downloads/VarSpeedServo-master.zip
+
   r_motor = 0;
 }
 // 角度方向設定
