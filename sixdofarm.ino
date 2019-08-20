@@ -8,11 +8,53 @@
 #define R_PULSE_START 80 //駆動に必要な最低PCMパルス数
 #define PULSE_1MPS 80 //1.0m/sに必要なPCMパルス数
 
+VarSpeedServo servo1;
+VarSpeedServo servo2;
+VarSpeedServo servo3;
+VarSpeedServo servo4;
+VarSpeedServo servo5;
+VarSpeedServo servo6;
+void initpos()  //initialization
+{
+  sea = servo1.read();
+  seb = servo2.read();
+  sec = servo3.read();
+  sed = servo4.read();
+  see = servo5.read();
+  sef = servo6.read();
+
+  servo1.write(66, abs(sea - 66));
+  servo2.write(60, abs(seb - 60));
+  servo3.write(20, abs(sec - 20));
+  servo4.write(60, abs(sed - 60));
+  servo5.write(90, abs(see - 90));
+  servo6.write(90, abs(sef - 90));
+}
+
+void setup()
+{
+  myshow = 0;
+  mycomflag = 0;       // the  ARM default  state: 2 automatic operation
+  myservoA.attach(3);  //  Control waist (A) port number is   3
+  myservoB.attach(5);  //  Control lorearm（B）port number is 5
+  myservoC.attach(6);  //  Control  Forearm（C）port number is 6
+  myservoD.attach(9);  // Control Forearm rotation (D) port number is 9
+  myservoE.attach(10); // Control wrist（E）port number is 10 wrist
+  myservoF.attach(11); // Control wrist rotation (F) port number is 9
+
+  myservoA.write(66);
+  myservoB.write(60);
+  myservoC.write(20);
+  myservoD.write(60);
+  myservoE.write(90);
+  myservoF.write(90);
+
+}
 ros::NodeHandle nh;
 int cmdvel_cnt = 0;
 int l_motor = 0, r_motor = 0;
 std_msgs::Int32 count_msg;
-void MotorCmdCallback(const geometry_msgs::Twist& msg) {
+void PosCmdCallback(const geometry_msgs::Twist& msg) {
   cmdvel_cnt = 0;
 
   // 進行方向設定
@@ -23,8 +65,7 @@ void MotorCmdCallback(const geometry_msgs::Twist& msg) {
     l_motor = (int)(-1 * L_PULSE_START + PULSE_1MPS * msg.linear.x);
     r_motor = (int)(-1 * R_PULSE_START + PULSE_1MPS * msg.linear.x);
   } else {
-l_motor = 0; file: ///home/kaoru/Downloads/VarSpeedServo-master.zip
-
+    l_motor = 0;
     r_motor = 0;
   }
   // 角度方向設定
