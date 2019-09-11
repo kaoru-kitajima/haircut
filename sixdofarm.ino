@@ -10,9 +10,9 @@
 //#include <std_msgs/MultiArrayDimension.h>
 //#include <std_msgs/MultiArrayLayout.h>
 #define MaxVel 100
-#define Debug 1 //サーボを繋がないなら1、つなぐなら0
+#define Debug 0 //サーボを繋がないなら1、つなぐなら0
 int led = 13;
-VarSpeedServo servo1;
+VarSpeedServo servo1;// 0~180
 VarSpeedServo servo2;
 VarSpeedServo servo3;
 VarSpeedServo servo4;
@@ -25,24 +25,24 @@ std_msgs::Float32MultiArray msg;
 ros::Publisher responser("response", &msg);
 void messageCb(const std_msgs::Float32MultiArray& msg_sub)
 {
-  servo1.write(msg_sub.data[0], MaxVel);
-  servo2.write(msg_sub.data[1], MaxVel);
-  servo3.write(msg_sub.data[2], MaxVel);
-  servo4.write(msg_sub.data[3], MaxVel);
-  servo5.write(msg_sub.data[4], MaxVel);
-  servo6.write(msg_sub.data[5], MaxVel);
+  servo1.write(msg_sub.data[0]*180);
+  servo2.write(msg_sub.data[1]*180);
+  servo3.write(msg_sub.data[2]*180);
+  servo4.write(msg_sub.data[3]*180);
+  servo5.write(msg_sub.data[4]*180);
+  servo6.write(msg_sub.data[5]*180);
   servo1.wait();
   servo2.wait();
   servo3.wait();
   servo4.wait();
   servo5.wait();
   servo6.wait();
-  msg.data[0] = servo1.read();
-  msg.data[1] = servo1.read();
-  msg.data[2] = servo1.read();
-  msg.data[3] = servo1.read();
-  msg.data[4] = servo1.read();
-  msg.data[5] = servo1.read();
+  msg.data[0] = (float)servo1.read()/180;
+  msg.data[1] = (float)servo1.read()/180;
+  msg.data[2] = (float)servo1.read()/180;
+  msg.data[3] = (float)servo1.read()/180;
+  msg.data[4] = (float)servo1.read()/180;
+  msg.data[5] = (float)servo1.read()/180;
   responser.publish( &msg );
 
 }
